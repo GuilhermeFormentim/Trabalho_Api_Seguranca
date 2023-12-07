@@ -1,17 +1,19 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import * as dotenv from "dotenv";
 
-import * as dotenv from "dotenv"
-dotenv.config()
+dotenv.config();
 
 export function verificaToken(req, res, next) {
-
   try {
-    const token = req.headers.authorization.split(" ")[1]
-    const decode = atob(token)
-    req.usuario_id = decode.usuario_logado_id
-    req.usuario_nome = decode.usuario_logado_nome
-    next()
+    const decodedSecretToken = jwt.decode(req.headers.authorization);
+
+    if (process.env.id == decodedSecretToken.usuario_id &&
+      process.env.usuario == decodedSecretToken.usuario_nome) {
+      return next();
+    }
+    throw error();
+
   } catch (error) {
-    return res.status(401).json({ erro: "Falha na autenticação" })
+    return res.status(401).json({ erro: "Falha na autenticação" });
   }
 }

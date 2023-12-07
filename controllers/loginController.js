@@ -22,29 +22,33 @@ export async function loginUsuario(req, res) {
 
     await Log.create({
       descricao: `Tentativa de Login Inválida`,
-      complemento: `E-mail: ${email}`
+      complemento: `E-mail: ${email}`,
     })
 
     if (usuario == null) {
       res.status(400).json({ erro: mensagemErroPadrao })
       return
     }
-    if (bcrypt.compareSync(senha, usuario.senha)) {
 
-      const token = jwt.sign({
-        usuario_logado_id: usuario.id,
-        usuario_logado_nome: usuario.nome
-      },
-        process.env.JWT_KEY,
-        { expiresIn: "1h" }
+    if (await bcrypt.compare(senha, usuario.senha)) {
+
+      //A principio o erro fica nessa parte do codigo, pq fica retornando 400, e de vez em quando
+      //No insomnia mostrava um bagulho gigante (criei um outro arquivo pra te mostrar o erro que aparecia)
+      const token = jwt.sign(
+        {
+          usuario_id: usuario.id,
+          usuario_nome: usuario.nome,
+        },
+        process.env.SECRET,
+        {
+          expiresIn: 300,
+        }
       )
 
-      res.status(200).json({ msg: "Ok. Logado", token })
-    }
-    else {
-      res.status(400).json({ erro: mensagemErroPadrao })
+      res.status(200).json({ token })
       return
     }
+
   } catch (error) {
     res.status(400).json(error)
   }

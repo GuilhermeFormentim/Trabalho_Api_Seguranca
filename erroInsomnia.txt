@@ -1,0 +1,51 @@
+{
+	"name": "SequelizeUniqueConstraintError",
+	"errors": [
+		{
+			"message": "PRIMARY must be unique",
+			"type": "unique violation",
+			"path": "PRIMARY",
+			"value": "2",
+			"origin": "DB",
+			"instance": {
+				"id": 2,
+				"descricao": "Tentativa de Login Inválida",
+				"complemento": "E-mail: teste2@gmail.com",
+				"createdAt": "2023-12-07T22:37:00.137Z"
+			},
+			"validatorKey": "not_unique",
+			"validatorName": null,
+			"validatorArgs": []
+		}
+	],
+	"parent": {
+		"code": "ER_DUP_ENTRY",
+		"errno": 1062,
+		"sqlState": "23000",
+		"sqlMessage": "Duplicate entry '2' for key 'logs.PRIMARY'",
+		"sql": "INSERT INTO `logs` (`id`,`descricao`,`complemento`,`createdAt`) VALUES (?,?,?,?);",
+		"parameters": [
+			2,
+			"Tentativa de Login Inválida",
+			"E-mail: teste2@gmail.com",
+			"2023-12-07 22:37:00"
+		]
+	},
+	"original": {
+		"code": "ER_DUP_ENTRY",
+		"errno": 1062,
+		"sqlState": "23000",
+		"sqlMessage": "Duplicate entry '2' for key 'logs.PRIMARY'",
+		"sql": "INSERT INTO `logs` (`id`,`descricao`,`complemento`,`createdAt`) VALUES (?,?,?,?);",
+		"parameters": [
+			2,
+			"Tentativa de Login Inválida",
+			"E-mail: teste2@gmail.com",
+			"2023-12-07 22:37:00"
+		]
+	},
+	"fields": {
+		"PRIMARY": "2"
+	},
+	"sql": "INSERT INTO `logs` (`id`,`descricao`,`complemento`,`createdAt`) VALUES (?,?,?,?);"
+}

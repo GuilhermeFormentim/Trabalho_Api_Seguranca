@@ -7,12 +7,12 @@ import { softDeleteRecord, incluirRegistro, listarRegistros, alterarRegistro, ex
 
 const router = Router()
 
-router.get("/usuarios", verificaToken, usuarioIndex)
+router.get("/usuarios", usuarioIndex)
       .post("/usuarios", usuarioCreate)
       .get("/usuarios/solicitatroca", enviaEmail)
       .patch("/usuarios/trocasenha/:hash", usuarioTrocaSenha)
 
-router.get("/login", loginUsuario)
+router.post("/login", loginUsuario)
 
 router.delete("/:id", verificaToken, softDeleteRecord);
 router.post('/', incluirRegistro);
