@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { usuarioCreate, usuarioIndex, usuarioTrocaSenha } from "./controllers/usuarioController.js"
+import { usuarioCreate, usuarioIndex, usuarioTrocaSenha, usuarioEsqueciSenha } from "./controllers/usuarioController.js"
 import { loginUsuario } from "./controllers/loginController.js"
 import { verificaToken } from "./middlewares/verificaToken.js"
 import { enviaEmail } from "./controllers/emailController.js"
@@ -11,6 +11,7 @@ router.get("/usuarios", usuarioIndex)
       .post("/usuarios", usuarioCreate)
       .get("/usuarios/solicitatroca", enviaEmail)
       .patch("/usuarios/trocasenha/:hash", usuarioTrocaSenha)
+      .post('/usuarios/esquecisenha', usuarioEsqueciSenha)
 
 router.post("/login", loginUsuario)
 

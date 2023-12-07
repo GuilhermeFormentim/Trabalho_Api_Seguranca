@@ -1,5 +1,8 @@
 import { Troca } from "../models/Troca.js"
 import { Usuario } from "../models/Usuario.js"
+import { v4 as uuidv4 } from 'uuid';
+import nodemailer from 'nodemailer';
+
 
 export async function usuarioIndex(req, res) {
   try {
@@ -105,3 +108,41 @@ export async function usuarioTrocaSenha(req, res) {
   }
 }
 
+export async function usuarioEsqueciSenha(req, res) {
+  const { email } = req.body;
+
+  try {
+    const usuario = await Usuario.findOne({ where: { email } });
+
+    if (!usuario) {
+      res.status(400).json({ erro: "Usuário não encontrado" });
+      return;
+    }
+
+    const tokenRecuperacao = uuidv4();
+
+    await usuario.update({ token_recuperacao_senha: tokenRecuperacao });
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'testestetestestetestetesteste@gmail.com',
+        pass: 'Teste123@'
+      },
+    })
+
+    const resetUrl = `http://localhost:3000/usuario/troca-senha/${tokenRecuperacao}`;
+
+    await transporter.sendMail({
+      from: 'testestetestestetestetesteste@gmail.com',
+      to: usuario.email,
+      subject: 'Recuperação de Senha',
+      text: 'Clique no link para recuperar sua senha: ' + resetUrl,
+    })
+    res.json({ msg: "Email enviado com sucesso" })
+
+  } catch (error) {
+    res.status(400).json(error)
+
+  }
+}

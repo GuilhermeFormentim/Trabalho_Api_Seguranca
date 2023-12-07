@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/conecta.js';
+import { Log } from './Log.js';
 
 export const Usuario = sequelize.define('usuario', {
   id: {
@@ -20,7 +21,12 @@ export const Usuario = sequelize.define('usuario', {
   senha: {
     type: DataTypes.STRING(60),
     allowNull: false
-  }
+  },
+  token_recuperacao_senha: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: true,
+  },
 }, {
   timestamps: false
 });
@@ -36,5 +42,8 @@ Usuario.beforeUpdate(usuario => {
   const hash = bcrypt.hashSync(usuario.senha, salt)
   usuario.senha = hash
 })
+
+Usuario.hasMany(Log, { foreignKey: 'usuario_id', onDelete: 'CASCADE' });
+Log.belongsTo(Usuario, { foreignKey: 'usuario_id', onDelete: 'CASCADE' });
 
 export default Usuario;
